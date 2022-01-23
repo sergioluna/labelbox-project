@@ -1,12 +1,12 @@
 const sql_create_images_table = `CREATE TABLE IF NOT EXISTS images (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL,
+    title UNIQUE VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL
 );`;
 
 const sql_create_users_table = `CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email VARCHAR(255) NOT NULL
+    email UNIQUE VARCHAR(255) NOT NULL
 );`;
 
 const sql_create_ratings_table = `CREATE TABLE IF NOT EXISTS ratings (
