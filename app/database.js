@@ -1,12 +1,12 @@
 const sql_create_images_table = `CREATE TABLE IF NOT EXISTS images (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title UNIQUE VARCHAR(255) NOT NULL,
-    url VARCHAR(255) NOT NULL
+    title TEXT UNIQUE NOT NULL,
+    url TEXT NOT NULL
 );`;
 
 const sql_create_users_table = `CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email UNIQUE VARCHAR(255) NOT NULL
+    email TEXT UNIQUE NOT NULL
 );`;
 
 const sql_create_ratings_table = `CREATE TABLE IF NOT EXISTS ratings (
@@ -51,4 +51,4 @@ const db = new sqlite3.Database(databaseName, (err) => {
     }
 });
 
-export default db;
+module.exports = db;
