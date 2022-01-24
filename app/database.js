@@ -14,8 +14,10 @@ const sql_create_ratings_table = `CREATE TABLE IF NOT EXISTS ratings (
     user_id INTEGER NOT NULL,
     image_id INTEGER NOT NULL,
     value INTEGER NOW NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (image_id) REFERENCES images(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE CASCADE,
+    UNIQUE(user_id,image_id)
+
 );`;
 
 const sqlite3 = require('sqlite3').verbose();
