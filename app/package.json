@@ -9,6 +9,7 @@
   "author": "sluna@sergioluna.dev",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.25.0",
     "express": "^4.17.2",
     "sqlite3": "^5.0.2"
   }
