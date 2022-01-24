@@ -32,21 +32,18 @@ const db = new sqlite3.Database(databaseName, (err) => {
                 console.error(err.message);
                 throw err;
             }
-            console.log('images table created');
         });
         db.run(sql_create_users_table, (err) => {
             if (err) {
                 console.error(err.message);
                 throw err;
             }
-            console.log('users table created');
         });
         db.run(sql_create_ratings_table, (err) => {
             if (err) {
                 console.error(err.message);
                 throw err;
             }
-            console.log('ratings table created');
         });
     }
 });
