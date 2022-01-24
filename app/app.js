@@ -96,7 +96,7 @@ app.post('/api/rating', (req, res) => {
 
     rating = { user_id: req.body.user_id, 
         image_id: req.body.image_id, 
-        value: req.value 
+        value: req.body.value 
     }
 
     db.run('INSERT INTO ratings (user_id, image_id, value) VALUES (?, ?, ?)',
@@ -115,6 +115,84 @@ app.post('/api/rating', (req, res) => {
     );
 });
 
+app.put('/api/rating/:rating_id', (req, res) => {
+    if (!req.params.rating_id) {
+        res.status(400).json({status: "error", message: "rating_id param is required in url (/api/rating/{rating_id})"});
+    }
+    if (!req.body.value) {
+        res.status(400).json({status: "error", message: "request body must contain value"});
+    } else if (![1, 2, 3, 4, 5].includes(req.body.value)) {
+        res.status(400).json({status: "error", message: "value must be either 1, 2, 3, 4, or 5"});
+    }
+
+    rating = {id: req.params.rating_id, value: req.body.value};
+
+    db.run('UPDATE ratings SET value = (?) WHERE id = (?)',
+        [rating.value, rating.id],
+        function (err) {
+            if (err) {
+                res.status(500).json({status: "error", message: err.message});
+            } else if (this.changes === 0) {
+                res.status(400).json({status: "error", message: "rating with id rating_id not found"});
+            } else {
+                res.json({status: "success", message: rating});
+            }
+        }
+    );
+});
+
+app.delete('/api/rating/:rating_id', (req, res) => {
+    if (!req.params.rating_id) {
+        res.status(400).json({status: "error", message: "rating_id param is required in url (/api/rating/{rating_id})"});
+    }
+
+    rating_id = req.params.rating_id;
+
+    db.run('DELETE FROM ratings WHERE id = (?)',
+        [rating_id],
+        function(err) {
+            if (err) {
+                res.status(500).json({status: "error", message: err.message});
+            } else if (this.changes === 0) {
+                res.status(404).json({status: "error", message: `rating with id of ${rating_id} was not found`});
+            } else {
+                res.json({status: "success", message: `rating with id of ${rating_id} no longer in database`});
+            }
+        }
+    );
+});
+
+app.get('/api/user/:user_id/ratings', (req, res) => {
+    if (!req.params.user_id) {
+        res.status(400).json({status: "error", message: "user_id param is required in url (/api/users/{user_id})"});
+    }
+
+    user_id = req.params.user_id;
+
+    db.get('SELECT * FROM users WHERE id = (?)',
+        [user_id],
+        function(err, row) {
+            if (err) {
+                res.status(500).json({status: "error", message: err.message});
+            } else if (!row) {
+                res.status(404).json({status: "error", message: "user not found"})
+            } else {
+                db.all('SELECT * FROM ratings WHERE user_id = (?)',
+                    [user_id],
+                    function(err, rows) {
+                        if (err) {
+                            res.status(500).json({status: "error", message: err.message});
+                        } else {
+                            res.json({status: "success", ratings: rows})
+                        }
+                    }
+                );
+            }
+        }
+    );
+
+    
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
