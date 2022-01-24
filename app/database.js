@@ -29,6 +29,7 @@ const db = new sqlite3.Database(databaseName, (err) => {
         throw err;
     } else {
         console.log(`Connected to database: ${databaseName}`);
+        db.run("PRAGMA foreign_keys = ON");
         db.run(sql_create_images_table, (err) => {
             if (err) {
                 console.error(err.message);
