@@ -26,7 +26,7 @@ const deleteUser = (user_id, onSuccess, onFailure) => {
         if (error) {
             onFailure(error);
         } else if (this.changes === 0) {
-            error = {message: "not found"};
+            const error = {message: "not found"};
             onFailure(error);
         } else {
             onSuccess();
@@ -57,6 +57,9 @@ const updateRating = (rating, onSuccess, onFailure) => {
 
     db.run(sql, values, function(error) {
         if (error) {
+            onFailure(error);
+        } else if (this.changes === 0) {
+            const error = {message: "not found"};
             onFailure(error);
         } else {
             onSuccess(rating);
