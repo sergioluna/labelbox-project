@@ -1,7 +1,7 @@
 const db = require('./database');
 const axios = require('axios');
 
-const fetchNASAImage = async (apiKey, onSuccess, onFailure) => {
+const fetchNASAImage = async (apiKey) => {
     if (!apiKey) {
         apiKey = "DEMO_KEY";
     }
