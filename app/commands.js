@@ -1,5 +1,20 @@
 const db = require('./database');
+const axios = require('axios');
 
+const fetchNASAImage = async (apiKey, onSuccess, onFailure) => {
+    if (!apiKey) {
+        apiKey = "DEMO_KEY";
+    }
+
+    try {
+        url = "https://api.nasa.gov/planetary/apod?api_key=".concat(apiKey);
+        const resp = await axios.get(url);
+        return resp.data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
 
 const createUser = (user, onSuccess, onFailure) => {
     sql = 'INSERT INTO users (email) VALUES (?)';
@@ -110,6 +125,7 @@ const getUserRatings = (user, onSuccess, onFailure) => {
 
 
 module.exports = {
+    fetchNASAImage,
     createUser,
     deleteUser,
     createRating,
