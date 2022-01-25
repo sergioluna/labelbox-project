@@ -67,10 +67,27 @@ const updateRating = (rating, onSuccess, onFailure) => {
     });
 }
 
+const deleteRating = (rating, onSuccess, onFailure) => {
+    sql = 'DELETE FROM users WHERE id = (?)';
+    values = [rating.id];
+
+    db.run(sql, values, function(error) {
+        if (error) {
+            onFailure(error);
+        } else if (this.changes === 0) {
+            const error = {message: "not found"};
+            onFailure(error);
+        } else {
+            onSuccess();
+        }
+    });
+}
+
 
 module.exports = {
     createUser,
     deleteUser,
     createRating,
-    updateRating
+    updateRating,
+    deleteRating
 }
