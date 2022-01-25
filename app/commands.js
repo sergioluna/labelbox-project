@@ -83,11 +83,37 @@ const deleteRating = (rating, onSuccess, onFailure) => {
     });
 }
 
+const getUserRatings = (user, onSuccess, onFailure) => {
+    sql = 'SELECT * FROM users WHERE id = (?)';
+    values = [user.id];
+
+    db.get(sql, values, function(error, row) {
+        if (error) {
+            onFailure(error);
+        } else if (!row) {
+            const error = {message: "not found"}
+            onFailure(error);
+        } else {
+            sql = 'SELECT * FROM rating WHERE user_id = (?)';
+            values = [user.id]
+
+            db.run(sql, values, function(error, rows) {
+                if (error) {
+                    onFailure(error);
+                } else {
+                    onSuccess(rows);
+                }
+            });
+        }
+    });
+}
+
 
 module.exports = {
     createUser,
     deleteUser,
     createRating,
     updateRating,
-    deleteRating
+    deleteRating,
+    getUserRatings
 }
