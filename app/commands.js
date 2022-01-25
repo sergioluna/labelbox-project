@@ -12,7 +12,7 @@ const createUser = (user, onSuccess, onFailure) => {
             user = {
                 id: this.lastID,
                 ...user
-            }
+            };
             onSuccess(user);
         }
     });
@@ -34,7 +34,40 @@ const deleteUser = (user_id, onSuccess, onFailure) => {
     });
 }
 
+const createRating = (rating, onSuccess, onFailure) => {
+    sql = 'INSERT INTO ratings (user_id, image_id, value) VALUES (?, ?, ?)';
+    values = [rating.user_id, rating.image_id, rating.value];
+
+    db.run(sql, values, function(error) {
+        if (error){
+            onFailure(error);
+        } else {
+            rating = {
+                id: this.lastID,
+                ...rating
+            };
+            onSuccess(rating);
+        }
+    });
+}
+
+const updateRating = (rating, onSuccess, onFailure) => {
+    sql = 'UPDATE ratings SET value = (?) WHERE id = (?)';
+    values = [rating.value, rating.id];
+
+    db.run(sql, values, function(error) {
+        if (error) {
+            onFailure(error);
+        } else {
+            onSuccess(rating);
+        }
+    });
+}
+
+
 module.exports = {
     createUser,
-    deleteUser
+    deleteUser,
+    createRating,
+    updateRating
 }
