@@ -16,6 +16,23 @@ const fetchNASAImage = async (apiKey) => {
     }
 }
 
+const saveNASAImage = (image, onSuccess, onFailure) => {
+    sql = 'INSERT INTO images (title, url) VALUES (?, ?)';
+    values = [image.title, image.url];
+
+    db.run(sql, values, function(error) {
+        if (error) {
+            onFailure(error);
+        } else {
+            image = {
+                id: this.lastID,
+                ...image
+            };
+            onSuccess(image);
+        }
+    });
+}
+
 const createUser = (user, onSuccess, onFailure) => {
     sql = 'INSERT INTO users (email) VALUES (?)';
     values = [user.email];
@@ -126,6 +143,7 @@ const getUserRatings = (user, onSuccess, onFailure) => {
 
 module.exports = {
     fetchNASAImage,
+    saveNASAImage,
     createUser,
     deleteUser,
     createRating,
