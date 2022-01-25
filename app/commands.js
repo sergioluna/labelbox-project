@@ -100,7 +100,7 @@ const updateRating = (rating, onSuccess, onFailure) => {
 }
 
 const deleteRating = (rating, onSuccess, onFailure) => {
-    sql = 'DELETE FROM users WHERE id = (?)';
+    sql = 'DELETE FROM ratings WHERE id = (?)';
     values = [rating.id];
 
     db.run(sql, values, function(error) {
@@ -126,10 +126,10 @@ const getUserRatings = (user, onSuccess, onFailure) => {
             const error = {message: "not found"}
             onFailure(error);
         } else {
-            sql = 'SELECT * FROM rating WHERE user_id = (?)';
+            sql = 'SELECT * FROM ratings WHERE user_id = (?)';
             values = [user.id]
 
-            db.run(sql, values, function(error, rows) {
+            db.all(sql, values, function(error, rows) {
                 if (error) {
                     onFailure(error);
                 } else {
